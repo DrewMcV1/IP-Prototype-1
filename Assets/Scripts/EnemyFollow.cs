@@ -21,7 +21,7 @@ public class EnemyFollow : MonoBehaviour {
 	{
 		if(Vector2.Distance(transform.position, target.position) < aggroRange)
 		{
-			transform.position = Vector2.MoveTowards(transform.position, speed * Time.deltaTime);
+			transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
 		}
 	}
 	
