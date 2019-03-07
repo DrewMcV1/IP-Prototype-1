@@ -16,7 +16,8 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     bool onTheGround = false;
 
-    public GameObject bulletToRight, bulletToLeft, gameOverText, restartButton, blood;    
+    public GameObject bulletToRight, bulletToLeft, gameOverText, restartButton, blood, blastToRight,
+                      blastToRight1, blastToRight2, blastToLeft, blastToLeft1, blastToLeft2;    
 
     Vector2 bulletPos;
     public float fireRate = 0.5f;
@@ -66,6 +67,13 @@ public class PlayerController : MonoBehaviour
             nextFire = Time.time + fireRate;
             fire();
         }
+
+        if (Input.GetButtonDown("Blast") && Time.time > nextFire)
+        {
+            SoundManagerScript.PlaySound("fire");
+            nextFire = Time.time + fireRate;
+            blast();
+        }
     }
 
     void LateUpdate()
@@ -99,6 +107,25 @@ public class PlayerController : MonoBehaviour
         {
             bulletPos += new Vector2(-1f, 0.33f);
             Instantiate(bulletToLeft, bulletPos, Quaternion.identity);
+        }
+    }
+
+    void blast()
+    {
+        bulletPos = transform.position;
+        if (facingRight)
+        {
+            bulletPos += new Vector2(+1f, 0.33f);
+            Instantiate(blastToRight, bulletPos, Quaternion.identity);
+            Instantiate(blastToRight1, bulletPos, Quaternion.identity);
+            Instantiate(blastToRight2, bulletPos, Quaternion.identity);
+        }
+        else
+        {
+            bulletPos += new Vector2(-1f, 0.33f);
+            Instantiate(blastToLeft, bulletPos, Quaternion.identity);
+            Instantiate(blastToLeft1, bulletPos, Quaternion.identity);
+            Instantiate(blastToLeft2, bulletPos, Quaternion.identity);
         }
     }
 

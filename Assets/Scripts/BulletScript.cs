@@ -5,7 +5,7 @@ using UnityEngine;
 public class BulletScript : MonoBehaviour {
 
     public float velocityX = 5f;
-    float velocityY = 0f;
+    public float velocityY = 0f;
     Rigidbody2D rb;
 
 	// Use this for initialization
