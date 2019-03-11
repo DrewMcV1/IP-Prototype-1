@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class PlayerController : MonoBehaviour
     public LayerMask theGround;
     public Transform groundCheck;
     bool onTheGround = false;
+    public static int whichWeapon = 1;    
+    
+
 
     public GameObject bulletToRight, bulletToLeft, gameOverText, restartButton, blood, blastToRight,
                       blastToRight1, blastToRight2, blastToLeft, blastToLeft1, blastToLeft2;    
@@ -23,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public float fireRate = 0.5f;
     float nextFire = 0.0f;
 
+   
 
     // Use this for initialization
     void Start()
@@ -38,6 +43,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
         velX = Input.GetAxisRaw("Horizontal");
         velY = rigBody.velocity.y;
         rigBody.velocity = new Vector2(velX * moveSpeed, velY);
@@ -68,12 +74,7 @@ public class PlayerController : MonoBehaviour
             fire();
         }
 
-        if (Input.GetButtonDown("Blast") && Time.time > nextFire)
-        {
-            SoundManagerScript.PlaySound("fire");
-            nextFire = Time.time + fireRate;
-            blast();
-        }
+        
     }
 
     void LateUpdate()
@@ -95,39 +96,42 @@ public class PlayerController : MonoBehaviour
         transform.localScale = localScale;
     }
 
+    
+
     void fire()
     {
         bulletPos = transform.position;
         if (facingRight)
         {
             bulletPos += new Vector2(+1f, 0.33f);
-            Instantiate(bulletToRight, bulletPos, Quaternion.identity);
+            if (whichWeapon == 1)
+            {
+                Instantiate(bulletToRight, bulletPos, Quaternion.identity);
+            }
+            else
+            {                
+                Instantiate(blastToRight, bulletPos, Quaternion.identity);
+                Instantiate(blastToRight1, bulletPos, Quaternion.identity);
+                Instantiate(blastToRight2, bulletPos, Quaternion.identity);
+            }
         }
         else
         {
             bulletPos += new Vector2(-1f, 0.33f);
-            Instantiate(bulletToLeft, bulletPos, Quaternion.identity);
+            if (whichWeapon == 1)
+            {
+                Instantiate(bulletToLeft, bulletPos, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(blastToLeft, bulletPos, Quaternion.identity);
+                Instantiate(blastToLeft1, bulletPos, Quaternion.identity);
+                Instantiate(blastToLeft2, bulletPos, Quaternion.identity);
+            }
         }
     }
 
-    void blast()
-    {
-        bulletPos = transform.position;
-        if (facingRight)
-        {
-            bulletPos += new Vector2(+1f, 0.33f);
-            Instantiate(blastToRight, bulletPos, Quaternion.identity);
-            Instantiate(blastToRight1, bulletPos, Quaternion.identity);
-            Instantiate(blastToRight2, bulletPos, Quaternion.identity);
-        }
-        else
-        {
-            bulletPos += new Vector2(-1f, 0.33f);
-            Instantiate(blastToLeft, bulletPos, Quaternion.identity);
-            Instantiate(blastToLeft1, bulletPos, Quaternion.identity);
-            Instantiate(blastToLeft2, bulletPos, Quaternion.identity);
-        }
-    }
+    
 
     void OnCollisionEnter2D(Collision2D col)
     {
@@ -140,6 +144,21 @@ public class PlayerController : MonoBehaviour
             gameObject.SetActive(false);
 
         }
+    }
+
+
+    public void changeWeapon()
+    {
+        if (whichWeapon == 1)
+        {
+            whichWeapon = 2;
+        }
+        else
+        {
+            whichWeapon = 1; 
+        }
+
+            
     }
 }
 
